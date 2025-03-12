@@ -6,10 +6,8 @@
     import DetailDetail from '@/components/DetailDetail.vue';
     import { ref } from 'vue';
     import { useMovieStore } from '@/stores/movieStore';
-    import { useRouter } from 'vue-router';
 
     const movieStore = useMovieStore();
-    const router = useRouter();
     const movieId = movieStore.selectedMovie;
     
     const movieDetail = ref(null);
@@ -20,12 +18,7 @@
             movieDetail.value = result;
         }
     }
-
-    const goBack = () => {
-        router.push('/list')
-    }
     fetchDetails();
-
 </script>
 
 <template>
@@ -34,7 +27,7 @@
         <div class="back"></div>
         <FavoriteButton class="favorite" :movieData="movieDetail"/>
         <div class="content_wrapper">
-            <BackButton @click="goBack"/>
+            <RouterLink to="/list" title="Back to List"><BackButton/></RouterLink>
             <div class="content">
                 <div class="components">
                     <DetailTitle class="title_comp" :titleData="movieDetail"/>

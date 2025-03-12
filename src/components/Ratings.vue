@@ -1,6 +1,7 @@
 <script setup>
     import RatingCircle from '@/components/RatingCircle.vue';
-    defineProps(['ratingData'])
+    const data = defineProps(['ratingData'])
+    const formattedRatings = JSON.parse(data.ratingData.ratings).map(rating => `${rating.Value} on ${rating.Source}`);    
 </script>
 
 <template>
@@ -13,8 +14,8 @@
             </div>
         </div>
         <div class="other_rating_wrapper">
-            <p>{{ ratingData.ratings.split('"')[11] }} on Rotten Tomatoes</p>
-            <p>{{ ratingData.ratings.split('"')[19] }} on Metacritic</p>
+            <p>{{ formattedRatings[1] }}</p>
+            <p>{{ formattedRatings[2] }}</p>
         </div>
     </div>
 </template>

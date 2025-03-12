@@ -1,6 +1,16 @@
 <script setup>
     import BackButton from '@/components/BackButton.vue';
-    defineProps(['genreTitle', 'searchTitle'])
+    import { computed } from 'vue';
+    const props = defineProps(['genreTitle', 'searchTitle'])
+    const titleToShow = computed(() => {
+        if (props.genreTitle) {
+            return `for "${props.genreTitle}" Genre`;
+        }
+        if (props.searchTitle) {
+            return `for "${props.searchTitle}"`;
+        }
+        return "for All the Movies";
+    })
 </script>
 
 <template>
@@ -9,9 +19,7 @@
         <div class="result">
             Result
             <br>
-            <div v-if="genreTitle === '' && searchTitle === ''" class="result_detail">for "All the Movies"</div>
-            <div v-else-if="genreTitle !== ''" class="result_detail">for "{{ genreTitle }}" Genre</div>
-            <div v-else-if="searchTitle !== ''" class="result_detail">for "{{ searchTitle }}"</div>
+            <div class="result_detail">{{ titleToShow }}</div>
         </div>
         <div class="profile_section"></div>
     </div>

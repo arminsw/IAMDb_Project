@@ -88,6 +88,5 @@
         .favorite--desktop {
             display: block;
         }
-
     }
 </style>

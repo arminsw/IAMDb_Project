@@ -6,11 +6,10 @@
 
     const router = useRouter();
     const movieStore = useMovieStore();
-
+    const query = ref('');
     const lang = shallowRef('en-US')
-
     const speech = useSpeechRecognition({ lang, continuous: true });
-    const { isListening, stop, result } = speech;
+    const { isListening, start, stop, result } = speech;
 
     watch(result, (newResult) => {
         if (newResult) {
@@ -18,7 +17,6 @@
         }
     });
 
-    const query = ref('');
     const search = () => {
         movieStore.genreQuery = '';
         movieStore.searchQuery = query.value;
@@ -31,8 +29,7 @@
         <img class="search_img" src="/searchIcon.svg" alt="Search Icon" title="Search" @click="search">
         <input class="searchBar" type="text" v-model="query" @keydown.enter="search">
         <div class="microphone_img_wrapper">
-            <img class="microphone_img" src="/microphone.svg" alt="Microphone Icon" title="Search by Voice" v-if="!isListening" @click="speech.start">
-            <img class="microphone_img" src="/microphoneRed.svg" alt="Microphone Icon" title="Search by Voice" v-if="isListening" @click="stop">
+            <img class="microphone_img" :src="isListening ? '/microphoneRed.svg' : '/microphone.svg'" alt="Microphone Icon" title="Search by Voice" @click="isListening ? stop() : start()">
         </div>
     </div>
 </template>

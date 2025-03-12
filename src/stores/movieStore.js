@@ -6,19 +6,17 @@ export const useMovieStore = defineStore('movieStore', () => {
   const selectedMovie = ref(null);
   const genreQuery = ref('');
   const searchQuery = ref('');
-
-  const setSelectedMovie = (id) => {
-    selectedMovie.value = id;
-  };
+  const favoriteList = ref([]);
 
   const fetchMovies = async () => {
     let pageCount = 1;
-
     const response = await fetch('https://moviesapi.codingfront.dev/api/v1/movies?page=1');
     if (response.ok) {
       const result = await response.json();
       pageCount = result.metadata.page_count;
       allMovies.value.push(...result.data);
+    } else {
+      alert('Please Refresh')
     }
 
     for (let i = 2; i <= pageCount; i++) {
@@ -26,11 +24,16 @@ export const useMovieStore = defineStore('movieStore', () => {
       if (response.ok) {
         const result = await response.json();
         allMovies.value.push(...result.data);
+      } else {
+        alert('Please Refresh')
       }
     }
   };
 
-  const favoriteList = ref([]);
+  const setSelectedMovie = (id) => {
+    selectedMovie.value = id;
+  };
+
   const toggleFavorite = (movieId) => {
     const index = favoriteList.value.findIndex(fav => fav === movieId);
     if (index === -1) {

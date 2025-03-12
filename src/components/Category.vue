@@ -1,12 +1,16 @@
 <script setup>
-    import { ref } from 'vue';
+    import { ref, computed, onMounted } from 'vue';
     import { useRouter } from 'vue-router';
     import { useMovieStore } from '@/stores/movieStore';
 
     const router = useRouter();
     const movieStore = useMovieStore();
-    const allGenres = ref('');
-    const defaultGenres = ref('');
+    const allGenres = ref([]);
+    const defaultGenres = ref([]);
+    const status = ref(false);
+    const genresToShow = computed(() => (status.value ? allGenres.value : defaultGenres.value));
+    const buttonText = computed(() => (status.value ? 'Show Less' : 'Show More'));
+
     const fetchGenres = async () => {
         const response = await fetch('https://moviesapi.codingfront.dev/api/v1/genres')
         if (response.ok) {
@@ -14,15 +18,12 @@
             allGenres.value = result;
             defaultGenres.value = result.slice(0,4);
         } else {
-            alert('Error')
+            alert('Please Refresh')
         }
     };
-    fetchGenres();
+    onMounted(fetchGenres)
     
-    const status = ref(false);
-    const buttonText = ref('Show More');
     const showMoreLess = () => {
-        status.value ? buttonText.value = 'Show More' : buttonText.value = 'Show Less';
         status.value = !status.value;
     }
 
@@ -30,14 +31,12 @@
         movieStore.genreQuery = genre;
         router.push('/list')
     }    
-    
 </script>
 
 <template>
     <div class="category_wrapper">
         <ul class="flex">
-            <li class="buttons" v-if="!status" v-for='genre in defaultGenres' :title="`Search for ${genre.name}`" @click="searchCategory(genre.name)">{{ genre.name }}</li>
-            <li class="buttons" v-else v-for='genre in allGenres' :title="`Search for ${genre.name}`" @click="searchCategory(genre.name)">{{ genre.name }}</li>
+            <li class="buttons" v-for='genre in genresToShow' :title="`Search for ${genre.name}`" @click="searchCategory(genre.name)">{{ genre.name }}</li>
             <li class="moreLessButton buttons" @click="showMoreLess">
                 {{ buttonText }}
                 <img class="arrow_img" src="/rightArrow.svg" alt="Right Arrow">

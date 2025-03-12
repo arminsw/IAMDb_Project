@@ -3,20 +3,15 @@
     import { useMovieStore } from '@/stores/movieStore';
     const movieStore = useMovieStore();
     const props = defineProps(['movieData']);
-
+    
+    const buttonText = computed(() => movieStore.isFavorite(props.movieData.id) ? 'Remove from Favorite' : 'Add to Favorite');
     const toggleFavorite = () => {
         movieStore.toggleFavorite(props.movieData.id);
     };
-
-    const text = computed(() => 
-        movieStore.isFavorite(props.movieData.id) ? 'Remove from Favorite' : 'Add to Favorite'
-    );
-    
-
 </script>
 
 <template>
-    <div class="favorite" :class="movieStore.isFavorite(movieData.id) ? 'active' : 'deactive'" @click="toggleFavorite">{{ text }}</div>
+    <div class="favorite" :class="movieStore.isFavorite(movieData.id) ? 'active' : 'deactive'" @click="toggleFavorite">{{ buttonText }}</div>
 </template>
 
 <style scoped>

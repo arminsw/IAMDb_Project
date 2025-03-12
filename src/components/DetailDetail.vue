@@ -69,8 +69,4 @@
     .detail_wrapper {
         padding-bottom: 54px;
     }
-
-    @media screen and (min-width: 450px) {
-
-    }
 </style>
